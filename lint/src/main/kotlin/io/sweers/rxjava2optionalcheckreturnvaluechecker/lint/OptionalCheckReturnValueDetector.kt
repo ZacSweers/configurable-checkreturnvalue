@@ -84,7 +84,7 @@ class OptionalCheckReturnValueDetector : Detector(), SourceCodeScanner {
       allPackageAnnotations: List<UAnnotation>
   ) {
     if (isExpressionValueUnused(element)) {
-      // If this OptionalCheckReturnValue annotation is from a class, check to see
+      // If this OptionalCheckReturnValue annotations is from a class, check to see
       // if it's been reversed with @CanIgnoreReturnValue
       if (containsAnnotation(allMemberAnnotations, ERRORPRONE_CAN_IGNORE_RETURN_VALUE) ||
           containsAnnotation(
@@ -108,7 +108,7 @@ class OptionalCheckReturnValueDetector : Detector(), SourceCodeScanner {
           methodName
       )
       if (suggested != null) {
-        // TODO: Resolve suggest attribute (e.g. prefix annotation class if it starts
+        // TODO: Resolve suggest attribute (e.g. prefix annotations class if it starts
         // with "#" etc?
         message = String.format(
             "The result of `%1\$s` is not used; did you mean to call `%2\$s`?",

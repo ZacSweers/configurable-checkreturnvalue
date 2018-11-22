@@ -47,8 +47,8 @@ import org.junit.runners.JUnit4;
   @Before public void setUp() {
     compilationHelper =
         CompilationTestHelper.newInstance(OptionalCheckReturnValue.class, getClass());
-    compilationHelper.addSourceLines("io/reactivex/annotation/OptionalCheckReturnValue.java",
-        "package io.reactivex.annotation;",
+    compilationHelper.addSourceLines("io/reactivex/annotations/OptionalCheckReturnValue.java",
+        "package io.reactivex.annotations;",
         "public @interface OptionalCheckReturnValue {}");
   }
 
@@ -84,7 +84,7 @@ import org.junit.runners.JUnit4;
         .addSourceLines("test/TestCustomCanIgnoreReturnValueAnnotation.java",
             "package test;",
             "import foo.bar.CanIgnoreReturnValue;",
-            "@io.reactivex.annotation.OptionalCheckReturnValue",
+            "@io.reactivex.annotations.OptionalCheckReturnValue",
             "public class TestCustomCanIgnoreReturnValueAnnotation {",
             "  @CanIgnoreReturnValue",
             "  public String ignored() {",
@@ -104,7 +104,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void testPackageAnnotation() {
     compilationHelper.addSourceLines("package-info.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "package lib;")
         .addSourceLines("lib/Lib.java",
             "package lib;",
@@ -124,7 +124,7 @@ import org.junit.runners.JUnit4;
   @Test public void testClassAnnotation() {
     compilationHelper.addSourceLines("lib/Lib.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Lib {",
         "  public static int f() { return 42; }",
         "}")
@@ -141,7 +141,7 @@ import org.junit.runners.JUnit4;
   // Don't match void-returning methods in packages with @CRV
   @Test public void testVoidReturningMethodInAnnotatedPackage() {
     compilationHelper.addSourceLines("package-info.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "package lib;")
         .addSourceLines("lib/Lib.java",
             "package lib;",
@@ -155,11 +155,11 @@ import org.junit.runners.JUnit4;
   @Test public void badCRVOnProcedure() {
     compilationHelper.addSourceLines("Test.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Test {",
         "  // BUG: Diagnostic contains:",
         "  // @OptionalCheckReturnValue may not be applied to void-returning methods",
-        "  @io.reactivex.annotation.OptionalCheckReturnValue public static void f() {}",
+        "  @io.reactivex.annotations.OptionalCheckReturnValue public static void f() {}",
         "}")
         .doTest();
   }
@@ -167,11 +167,11 @@ import org.junit.runners.JUnit4;
   @Test public void badCRVOnPseudoProcedure() {
     compilationHelper.addSourceLines("Test.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Test {",
         "  // BUG: Diagnostic contains:",
         "  // @OptionalCheckReturnValue may not be applied to void-returning methods",
-        "  @io.reactivex.annotation.OptionalCheckReturnValue public static Void f() {",
+        "  @io.reactivex.annotations.OptionalCheckReturnValue public static Void f() {",
         "    return null;",
         "  }",
         "}")
@@ -183,7 +183,7 @@ import org.junit.runners.JUnit4;
     compilationHelper.addSourceLines("Test.java",
         "package lib;",
         "public class Test {",
-        "  @io.reactivex.annotation.OptionalCheckReturnValue",
+        "  @io.reactivex.annotations.OptionalCheckReturnValue",
         " public int f() {",
         "    return 0;",
         "  }",
@@ -206,7 +206,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void testPackageAnnotationButCanIgnoreReturnValue() {
     compilationHelper.addSourceLines("package-info.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "package lib;")
         .addSourceLines("lib/Lib.java",
             "package lib;",
@@ -221,7 +221,7 @@ import org.junit.runners.JUnit4;
   @Test public void testClassAnnotationButCanIgnoreReturnValue() {
     compilationHelper.addSourceLines("lib/Lib.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Lib {",
         "  @com.google.errorprone.annotations.CanIgnoreReturnValue",
         "  public static int f() { return 42; }",
@@ -233,7 +233,7 @@ import org.junit.runners.JUnit4;
   @Test public void badCanIgnoreReturnValueOnProcedure() {
     compilationHelper.addSourceLines("Test.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Test {",
         "  // BUG: Diagnostic contains:",
         "  // @CanIgnoreReturnValue may not be applied to void-returning methods",
@@ -245,7 +245,7 @@ import org.junit.runners.JUnit4;
   @Test public void testNestedClassAnnotation() {
     compilationHelper.addSourceLines("lib/Lib.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Lib {",
         "  public static class Inner {",
         "    public static class InnerMost {",
@@ -266,7 +266,7 @@ import org.junit.runners.JUnit4;
   @Test public void testNestedClassWithCanIgnoreAnnotation() {
     compilationHelper.addSourceLines("lib/Lib.java",
         "package lib;",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Lib {",
         "  @com.google.errorprone.annotations.CanIgnoreReturnValue",
         "  public static class Inner {",
@@ -286,7 +286,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void testPackageWithCanIgnoreAnnotation() {
     compilationHelper.addSourceLines("package-info.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "package lib;")
         .addSourceLines("lib/Lib.java",
             "package lib;",
@@ -301,7 +301,7 @@ import org.junit.runners.JUnit4;
   @Test public void errorBothClass() {
     compilationHelper.addSourceLines("Test.java",
         "@com.google.errorprone.annotations.CanIgnoreReturnValue",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "// BUG: Diagnostic contains: @OptionalCheckReturnValue and @CanIgnoreReturnValue cannot"
             + " both be applied to the same class",
         "class Test {}")
@@ -312,7 +312,7 @@ import org.junit.runners.JUnit4;
     compilationHelper.addSourceLines("Test.java",
         "class Test {",
         "  @com.google.errorprone.annotations.CanIgnoreReturnValue",
-        "  @io.reactivex.annotation.OptionalCheckReturnValue",
+        "  @io.reactivex.annotations.OptionalCheckReturnValue",
         "  // BUG: Diagnostic contains: @OptionalCheckReturnValue and @CanIgnoreReturnValue cannot"
             + " both be applied to the same method",
         "  void m() {}",
@@ -323,7 +323,7 @@ import org.junit.runners.JUnit4;
   // Don't match Void-returning methods in packages with @CRV
   @Test public void testJavaLangVoidReturningMethodInAnnotatedPackage() {
     compilationHelper.addSourceLines("package-info.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "package lib;")
         .addSourceLines("lib/Lib.java",
             "package lib;",
@@ -338,7 +338,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void ignoreInTests() {
     compilationHelper.addSourceLines("Foo.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Foo {",
         "  public int f() {",
         "    return 42;",
@@ -366,7 +366,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void ignoreInTestsWithRule() {
     compilationHelper.addSourceLines("Foo.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Foo {",
         "  public int f() {",
         "    return 42;",
@@ -385,7 +385,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void ignoreInTestsWithFailureMessage() {
     compilationHelper.addSourceLines("Foo.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Foo {",
         "  public int f() {",
         "    return 42;",
@@ -415,7 +415,7 @@ import org.junit.runners.JUnit4;
   @Test
   public void ignoreInThrowingRunnables() {
     compilationHelper.addSourceLines("Foo.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Foo {",
         "  public int f() {",
         "    return 42;",
@@ -454,7 +454,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void ignoreTruthFailure() {
     compilationHelper.addSourceLines("Foo.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Foo {",
         "  public int f() {",
         "    return 42;",
@@ -475,7 +475,7 @@ import org.junit.runners.JUnit4;
 
   @Test public void onlyIgnoreWithEnclosingTryCatch() {
     compilationHelper.addSourceLines("Foo.java",
-        "@io.reactivex.annotation.OptionalCheckReturnValue",
+        "@io.reactivex.annotations.OptionalCheckReturnValue",
         "public class Foo {",
         "  public int f() {",
         "    return 42;",
@@ -502,7 +502,7 @@ import org.junit.runners.JUnit4;
   @Test public void ignoreInOrderVerification() {
     compilationHelper.addSourceLines("Lib.java",
         "public class Lib {",
-        "  @io.reactivex.annotation.OptionalCheckReturnValue",
+        "  @io.reactivex.annotations.OptionalCheckReturnValue",
         "  public int f() {",
         "    return 0;",
         "  }",
@@ -521,7 +521,7 @@ import org.junit.runners.JUnit4;
 
   /** Test class containing a method annotated with @CRV. */
   public static class CRVTest {
-    @io.reactivex.annotation.OptionalCheckReturnValue public static int f() {
+    @io.reactivex.annotations.OptionalCheckReturnValue public static int f() {
       return 42;
     }
   }

@@ -16,7 +16,7 @@
 
 package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
 
-import io.reactivex.annotation.OptionalCheckReturnValue;
+import io.reactivex.annotations.OptionalCheckReturnValue;
 import org.junit.rules.ExpectedException;
 
 /**

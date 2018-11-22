@@ -16,7 +16,7 @@
 
 package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
 
-import io.reactivex.annotation.OptionalCheckReturnValue;
+import io.reactivex.annotations.OptionalCheckReturnValue;
 import java.util.function.Supplier;
 
 /**
@@ -31,7 +31,7 @@ public class OptionalCheckReturnValueNegativeCases {
     obj.toString();
   }
 
-  @SuppressWarnings("foo") // wrong annotation
+  @SuppressWarnings("foo") // wrong annotations
   public void test2() {}
 
   @OptionalCheckReturnValue
