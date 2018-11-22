@@ -51,14 +51,14 @@ import javax.lang.model.element.ElementKind;
 public class OptionalCheckReturnValue extends AbstractReturnValueIgnored
     implements MethodTreeMatcher, ClassTreeMatcher {
 
-  private static final String CHECK_RETURN_VALUE = "OptionalCheckReturnValue";
+  private static final String OPTIONAL_CHECK_RETURN_VALUE = "OptionalCheckReturnValue";
   private static final String CAN_IGNORE_RETURN_VALUE = "CanIgnoreReturnValue";
 
   private static Optional<Boolean> shouldCheckReturnValue(Symbol sym) {
     if (hasDirectAnnotationWithSimpleName(sym, CAN_IGNORE_RETURN_VALUE)) {
       return Optional.of(false);
     }
-    if (hasDirectAnnotationWithSimpleName(sym, CHECK_RETURN_VALUE)) {
+    if (hasDirectAnnotationWithSimpleName(sym, OPTIONAL_CHECK_RETURN_VALUE)) {
       return Optional.of(true);
     }
     return Optional.empty();
@@ -127,7 +127,7 @@ public class OptionalCheckReturnValue extends AbstractReturnValueIgnored
   @Override public Description matchMethod(MethodTree tree, VisitorState state) {
     MethodSymbol method = ASTHelpers.getSymbol(tree);
 
-    boolean checkReturn = hasDirectAnnotationWithSimpleName(method, CHECK_RETURN_VALUE);
+    boolean checkReturn = hasDirectAnnotationWithSimpleName(method, OPTIONAL_CHECK_RETURN_VALUE);
     boolean canIgnore = hasDirectAnnotationWithSimpleName(method, CAN_IGNORE_RETURN_VALUE);
 
     if (checkReturn && canIgnore) {
@@ -137,7 +137,7 @@ public class OptionalCheckReturnValue extends AbstractReturnValueIgnored
 
     String annotationToValidate;
     if (checkReturn) {
-      annotationToValidate = CHECK_RETURN_VALUE;
+      annotationToValidate = OPTIONAL_CHECK_RETURN_VALUE;
     } else if (canIgnore) {
       annotationToValidate = CAN_IGNORE_RETURN_VALUE;
     } else {
@@ -162,7 +162,7 @@ public class OptionalCheckReturnValue extends AbstractReturnValueIgnored
    * applied to a class (or interface or enum).
    */
   @Override public Description matchClass(ClassTree tree, VisitorState state) {
-    if (hasDirectAnnotationWithSimpleName(ASTHelpers.getSymbol(tree), CHECK_RETURN_VALUE)
+    if (hasDirectAnnotationWithSimpleName(ASTHelpers.getSymbol(tree), OPTIONAL_CHECK_RETURN_VALUE)
         && hasDirectAnnotationWithSimpleName(ASTHelpers.getSymbol(tree), CAN_IGNORE_RETURN_VALUE)) {
       return buildDescription(tree).setMessage(String.format(BOTH_ERROR, "class"))
           .build();
