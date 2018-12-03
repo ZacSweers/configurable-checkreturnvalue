@@ -36,6 +36,7 @@ import org.jetbrains.uast.ULambdaExpression
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.getParentOfType
+import java.util.EnumSet
 
 /**
  * Adapted from https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint/libs/lint-checks/src/main/java/com/android/tools/lint/checks/CheckResultDetector.kt
@@ -192,7 +193,7 @@ class OptionalCheckReturnValueDetector : Detector(), SourceCodeScanner {
     const val ATTR_SUGGEST = "suggest"
     private val IMPLEMENTATION = Implementation(
         OptionalCheckReturnValueDetector::class.java,
-        Scope.JAVA_FILE_SCOPE
+        EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES)
     )
     /** Method result should be used  */
     @JvmField

@@ -15,7 +15,7 @@ class OptionalCheckReturnValueDetectorTest {
   """).indented()
 
   private val canIgnoreReturnValue = java("""
-    package com.google.errorprone.annotations.CanIgnoreReturnValue;
+    package com.google.errorprone.annotations;
 
     public @interface CanIgnoreReturnValue {
     }
@@ -25,7 +25,7 @@ class OptionalCheckReturnValueDetectorTest {
   fun basicCheck() {
     lint()
         .files(annotation, java("""
-          package foo;
+          package test.foo;
           import io.reactivex.annotations.OptionalCheckReturnValue;
           class Example {
             @OptionalCheckReturnValue
@@ -39,7 +39,7 @@ class OptionalCheckReturnValueDetectorTest {
         .issues(OptionalCheckReturnValueDetector.OPTIONAL_CHECK_RETURN_VALUE)
         .run()
         .expect("""
-          |src/foo/Example.java:9: Error: The result of foo is not used [OptionalCheckReturnValue]
+          |src/test/foo/Example.java:9: Error: The result of foo is not used [OptionalCheckReturnValue]
           |    foo();
           |    ~~~~~
           |1 errors, 0 warnings""".trimMargin()
@@ -51,7 +51,7 @@ class OptionalCheckReturnValueDetectorTest {
   fun canIgnoreOnClass() {
     lint()
         .files(annotation, canIgnoreReturnValue, java("""
-          package foo;
+          package test.foo;
           import com.google.errorprone.annotations.CanIgnoreReturnValue;
           import io.reactivex.annotations.OptionalCheckReturnValue;
           @CanIgnoreReturnValue
@@ -75,7 +75,7 @@ class OptionalCheckReturnValueDetectorTest {
   fun canIgnoreOnMethod() {
     lint()
         .files(annotation, canIgnoreReturnValue, java("""
-          package foo;
+          package test.foo;
           import com.google.errorprone.annotations.CanIgnoreReturnValue;
           import io.reactivex.annotations.OptionalCheckReturnValue;
           class Example {
@@ -99,10 +99,10 @@ class OptionalCheckReturnValueDetectorTest {
   fun canIgnoreOnPackage() {
     val packageInfo = java("""
         @com.google.errorprone.annotations.CanIgnoreReturnValue
-        package lib;""").indented()
+        package test.lib;""").indented()
     lint()
         .files(annotation, canIgnoreReturnValue, packageInfo, java("""
-          package lib;
+          package test.lib;
           import io.reactivex.annotations.OptionalCheckReturnValue;
           class Example {
             @OptionalCheckReturnValue
