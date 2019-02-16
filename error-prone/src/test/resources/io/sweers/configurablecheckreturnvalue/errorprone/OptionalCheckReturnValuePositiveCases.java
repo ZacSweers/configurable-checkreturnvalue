@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
+package io.sweers.configurablecheckreturnvalue.errorprone;
 
 import io.reactivex.annotations.OptionalCheckReturnValue;
 import org.junit.rules.ExpectedException;

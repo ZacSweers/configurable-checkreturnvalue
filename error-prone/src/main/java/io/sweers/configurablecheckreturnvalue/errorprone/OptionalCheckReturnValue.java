@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
+package io.sweers.configurablecheckreturnvalue.errorprone;
 
 import static com.google.errorprone.BugPattern.Category.JDK;
 import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;

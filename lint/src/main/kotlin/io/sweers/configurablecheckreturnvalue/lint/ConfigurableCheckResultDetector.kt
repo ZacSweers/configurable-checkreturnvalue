@@ -1,4 +1,4 @@
-package io.sweers.rxjava2optionalcheckreturnvaluechecker.lint
+package io.sweers.configurablecheckreturnvalue.lint
 
 /*
  * Copyright (C) 2017 The Android Open Source Project
@@ -46,7 +46,7 @@ import java.util.Properties
  *
  * Modified to only check `OptionalCheckReturnValue`.
  */
-class OptionalCheckReturnValueDetector : Detector(), SourceCodeScanner {
+class ConfigurableCheckResultDetector : Detector(), SourceCodeScanner {
 
   private lateinit var appliedAnnotations: List<String>
 
@@ -235,7 +235,7 @@ class OptionalCheckReturnValueDetector : Detector(), SourceCodeScanner {
     // From discussion on lint-dev https://groups.google.com/d/msg/lint-dev/ULQMzW1ZlP0/1dG4Vj3-AQAJ
     // TODO: Remove after AGP 3.4 release when this behavior will no longer be required.
     private val IMPLEMENTATION = Implementation(
-        OptionalCheckReturnValueDetector::class.java,
+        ConfigurableCheckResultDetector::class.java,
         EnumSet.of(Scope.JAVA_FILE, Scope.TEST_SOURCES),
         EnumSet.of(Scope.JAVA_FILE),
         EnumSet.of(Scope.TEST_SOURCES)
@@ -252,7 +252,7 @@ class OptionalCheckReturnValueDetector : Detector(), SourceCodeScanner {
     /** Method result should be used  */
     @JvmField
     val OPTIONAL_CHECK_RETURN_VALUE = Issue.create(
-        id = "OptionalCheckReturnValue",
+        id = "ConfigurableCheckReturnValue",
         briefDescription = "Ignoring results",
         explanation = """
                 Some methods have no side effects, and calling them without doing something \

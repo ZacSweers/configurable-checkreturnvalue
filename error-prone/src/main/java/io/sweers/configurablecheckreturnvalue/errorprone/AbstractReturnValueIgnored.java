@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
+package io.sweers.configurablecheckreturnvalue.errorprone;
 
 import static com.google.errorprone.matchers.Matchers.allOf;
 import static com.google.errorprone.matchers.Matchers.anyOf;

@@ -1,10 +1,9 @@
-rxjava2-optionalcheckreturnvalue-checkers
+Configurable CheckReturnValue
 =========================================
 
-[![Build Status](https://travis-ci.org/hzsweers/rxjava2-optionalcheckreturnvalue-checkers.svg?branch=master)](https://travis-ci.org/hzsweers/rxjava2-optionalcheckreturnvalue-checkers)
+[![Build Status](https://travis-ci.org/ZacSweers/configurablecheckreturnvalue.svg?branch=master)](https://travis-ci.org/ZacSweers/configurablecheckreturnvalue)
 
-Lint and Error-Prone checkers for RxJava2's `@OptionalCheckReturnValue` to treat it like a 
-regular `@CheckReturnValue`.
+Configurable Lint and Error-Prone alternative checkers for `@CheckReturnValue`.
 
 Integration
 -----------
@@ -14,10 +13,10 @@ TODO
 Download
 --------
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.sweers.rxjava2optionalcheckreturnvaluecheckers/lint.svg)](https://mvnrepository.com/artifact/io.sweers.rxjava2optionalcheckreturnvaluecheckers/lint)
+[![Maven Central](https://img.shields.io/maven-central/v/io.sweers.configurablecheckreturnvalue/lint.svg)](https://mvnrepository.com/artifact/io.sweers.configurablecheckreturnvalue/lint)
 ```gradle
-compile 'io.sweers.rxjava2optionalcheckreturnvaluecheckers:lint:x.y.z'
-compile 'io.sweers.rxjava2optionalcheckreturnvaluecheckers:error-prone:x.y.z'
+compile 'io.sweers.configurablecheckreturnvalue:lint:x.y.z'
+compile 'io.sweers.configurablecheckreturnvalue:error-prone:x.y.z'
 ```
 
 Snapshots of the development version are available in [Sonatype's snapshots repository][snapshots].

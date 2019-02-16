@@ -1,11 +1,11 @@
-package io.sweers.rxjava2optionalcheckreturnvaluechecker.lint
+package io.sweers.configurablecheckreturnvalue.lint
 
 import com.android.tools.lint.checks.infrastructure.TestFiles.java
 import com.android.tools.lint.checks.infrastructure.TestLintTask.lint
 import org.junit.Ignore
 import org.junit.Test
 
-class OptionalCheckReturnValueDetectorTest {
+class ConfigurableCheckResultDetectorTest {
 
   private val annotation = java("test/io/reactivex/annotations/OptionalCheckReturnValue.java", """
     package io.reactivex.annotations;
@@ -36,7 +36,7 @@ class OptionalCheckReturnValueDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(OptionalCheckReturnValueDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
         .run()
         .expect("""
           |test/test/foo/Example.java:9: Error: The result of foo is not used [OptionalCheckReturnValue]
@@ -65,7 +65,7 @@ class OptionalCheckReturnValueDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(OptionalCheckReturnValueDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }
@@ -89,7 +89,7 @@ class OptionalCheckReturnValueDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(OptionalCheckReturnValueDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }
@@ -114,7 +114,7 @@ class OptionalCheckReturnValueDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(OptionalCheckReturnValueDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }

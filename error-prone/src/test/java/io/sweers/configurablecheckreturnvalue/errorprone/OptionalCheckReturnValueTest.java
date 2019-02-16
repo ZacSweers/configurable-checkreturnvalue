@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
+package io.sweers.configurablecheckreturnvalue.errorprone;
 
 import com.google.common.io.ByteStreams;
 import com.google.errorprone.CompilationTestHelper;
@@ -547,7 +547,7 @@ import org.junit.runners.JUnit4;
         "class Test {",
         "  void m() {",
         "    // BUG: Diagnostic contains: Ignored return value",
-        "    io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone"
+        "    io.sweers.configurablecheckreturnvalue.errorprone"
             + ".OptionalCheckReturnValueTest.CRVTest.f();",
         "  }",
         "}")
