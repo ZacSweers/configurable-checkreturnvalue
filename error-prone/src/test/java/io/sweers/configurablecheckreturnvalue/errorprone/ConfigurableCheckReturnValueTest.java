@@ -16,6 +16,7 @@
 
 package io.sweers.configurablecheckreturnvalue.errorprone;
 
+import com.google.common.collect.ImmutableList;
 import com.google.errorprone.CompilationTestHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,6 +61,87 @@ public class ConfigurableCheckReturnValueTest {
             "    getString();",
             "  }",
             "}")
+        .doTest();
+  }
+
+  @Test public void testExclude() {
+    compilationHelper.addSourceLines("foo/bar/CheckReturnValue.java",
+        "package foo.bar;",
+        "public @interface CheckReturnValue {}")
+        .addSourceLines("test/TestExcludeCheckReturnValueAnnotation.java",
+            "package test;",
+            "import foo.bar.CheckReturnValue;",
+            "public class TestExcludeCheckReturnValueAnnotation {",
+            "  @CheckReturnValue",
+            "  public String getString() {",
+            "    return \"string\";",
+            "  }",
+            "  public void doIt() {",
+            "    // BUG: Diagnostic contains:",
+            "    getString();",
+            "  }",
+            "}")
+        .doTest();
+  }
+
+  @Test public void testCustomOverride() {
+    compilationHelper.addSourceLines("foo/bar/ConfiguredCheckReturn.java",
+        "package foo.bar;",
+        "public @interface ConfiguredCheckReturn {}")
+        .addSourceLines("test/TestCustomConfiguredCheckReturnAnnotation.java",
+            "package test;",
+            "import foo.bar.ConfiguredCheckReturn;",
+            "public class TestCustomConfiguredCheckReturnAnnotation {",
+            "  @ConfiguredCheckReturn",
+            "  public String getString() {",
+            "    return \"string\";",
+            "  }",
+            "  public void doIt() {",
+            "    getString();",
+            "  }",
+            "}")
+        .setArgs(ImmutableList.of("-XepOpt:ExcludeAnnotations=foo.bar.ConfiguredCheckReturn"))
+        .doTest();
+  }
+
+  @Test public void testCustomOverride_excludeSimpleName() {
+    compilationHelper.addSourceLines("foo/bar/ConfiguredCheckReturn.java",
+        "package foo.bar;",
+        "public @interface ConfiguredCheckReturn {}")
+        .addSourceLines("test/TestExcludeConfiguredCheckReturnAnnotation.java",
+            "package test;",
+            "import foo.bar.ConfiguredCheckReturn;",
+            "public class TestExcludeConfiguredCheckReturnAnnotation {",
+            "  @ConfiguredCheckReturn",
+            "  public String getString() {",
+            "    return \"string\";",
+            "  }",
+            "  public void doIt() {",
+            "    getString();",
+            "  }",
+            "}")
+        .setArgs(ImmutableList.of("-XepOpt:ExcludeAnnotations=ConfiguredCheckReturn"))
+        .doTest();
+  }
+
+  @Test public void testCustomOverride_simpleName() {
+    compilationHelper.addSourceLines("foo/bar/ConfiguredCheckReturn.java",
+        "package foo.bar;",
+        "public @interface ConfiguredCheckReturn {}")
+        .addSourceLines("test/TestCustomConfiguredCheckReturnAnnotation.java",
+            "package test;",
+            "import foo.bar.ConfiguredCheckReturn;",
+            "public class TestCustomConfiguredCheckReturnAnnotation {",
+            "  @ConfiguredCheckReturn",
+            "  public String getString() {",
+            "    return \"string\";",
+            "  }",
+            "  public void doIt() {",
+            "    // BUG: Diagnostic contains:",
+            "    getString();",
+            "  }",
+            "}")
+        .setArgs(ImmutableList.of("-XepOpt:CustomAnnotations=ConfiguredCheckReturn"))
         .doTest();
   }
 
