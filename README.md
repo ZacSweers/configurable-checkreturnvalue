@@ -10,7 +10,34 @@ Integration
 
 ## Lint
 
+(For Gradle)
 
+For Android Java/Kotlin projects, the lint should automatically be included just by using the `lintChecks` configuration
+For plain Java/Kotlin projects, you'll need to apply the `com.android.lint` plugin first
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.sweers.configurablecheckreturnvalue/lint.svg)](https://mvnrepository.com/artifact/io.sweers.configurablecheckreturnvalue/lint)
+```groovy
+// Only if not an Android projects
+apply plugin: 'com.android.lint'
+
+dependencies {
+  lintChecks 'io.sweers.configurablecheckreturnvalue:lint:x.y.z'
+}
+```
+
+By default, a common set of known `CheckReturnValue`-esque annotations will be used to match the
+standard Lint `CheckReturn` detector. To configure a custom set, you can define them with a `:`-delimited
+string of fully qualified class names or simple names via `configurableCheckReturnValue.customAnnotations` property
+in the root `gradle.properties` file. These override the default set. 
+ 
+If you want to use the standard set but just exclude some, you can define them as a `:`-delimited string
+of fully qualified class names via `configurableCheckReturnValue.excludeAnnotations`.
+
+```properties
+# gradle.properties
+configurableCheckReturnValue.customAnnotations=my.custom.annotation.CheckReturn:another.annotation.CheckReturnTwo
+configurableCheckReturnValue.excludeAnnotations=some.excluded.CheckReturnAnnotation
+```
 
 ## Error Prone
 
