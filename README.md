@@ -17,7 +17,7 @@ For plain Java/Kotlin projects, you'll need to apply the `com.android.lint` plug
 
 [![Maven Central](https://img.shields.io/maven-central/v/io.sweers.configurablecheckreturnvalue/lint.svg)](https://mvnrepository.com/artifact/io.sweers.configurablecheckreturnvalue/lint)
 ```groovy
-// Only if not an Android projects
+// Only if not an Android project
 apply plugin: 'com.android.lint'
 
 dependencies {
