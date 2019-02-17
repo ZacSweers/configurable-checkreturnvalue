@@ -22,16 +22,13 @@ plugins {
 sourceCompatibility = deps.build.javaVersion
 targetCompatibility = deps.build.javaVersion
 
-// we use this config to get the path of the JDK 9 javac jar, to
-// stick it in the bootclasspath when running tests
-configurations.maybeCreate("epJavac")
-
 dependencies {
   annotationProcessor deps.apt.autoService
   compileOnly deps.apt.autoService
   compileOnly deps.errorProne.checkApi
 
-  epJavac "com.google.errorprone:javac:9+181-r4173-1"
+  errorproneJavac "com.google.errorprone:javac:9+181-r4173-1"
+  errorprone deps.errorProne.core
   testImplementation deps.test.guava
   testImplementation(deps.errorProne.testHelpers) {
     exclude group: "junit", module: "junit"
@@ -41,10 +38,13 @@ dependencies {
   testImplementation(deps.test.mockito) {
     because "This is necessary for supporting mockito methods in sample cases"
   }
+  testImplementation(deps.test.assertJ) {
+    because "This is necessary for supporting assertj methods in sample cases"
+  }
 }
 
 test {
-  jvmArgs "-Xbootclasspath/p:${configurations.epJavac.asPath}"
+  jvmArgs "-Xbootclasspath/p:${configurations.errorproneJavac.asPath}"
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')

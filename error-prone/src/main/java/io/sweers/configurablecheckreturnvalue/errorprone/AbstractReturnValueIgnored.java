@@ -51,6 +51,7 @@ import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.StatementTree;
 import com.sun.source.tree.Tree;
 import com.sun.source.tree.Tree.Kind;
+import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.tree.JCTree.JCFieldAccess;
 import com.sun.tools.javac.tree.JCTree.JCIdent;
@@ -61,48 +62,54 @@ import javax.lang.model.type.TypeKind;
 
 /**
  * An abstract base class to match method invocations in which the return value is not used.
- * <p>
- * Adapted from https://github
- * .com/google/error-prone/blob/976ab7c62771d54dfe11bde9b01dc301d364957b/core/src/main/java/com
- * /google/errorprone/bugpatterns/AbstractReturnValueIgnored.java
+ *
+ * <br>
+ * Copied from:
+ * <a href="https://github.com/google/error-prone/blob/f14fb18bb05c7e9f10794771df692a42b333f18c/core/src/main/java/com/google/errorprone/bugpatterns/AbstractReturnValueIgnored.java">The error prone version.</a>
  *
  * @author eaftan@google.com (Eddie Aftandilian)
  */
 public abstract class AbstractReturnValueIgnored extends BugChecker
     implements MethodInvocationTreeMatcher, MemberReferenceTreeMatcher {
 
-  @Override public Description matchMethodInvocation(MethodInvocationTree methodInvocationTree,
-      VisitorState state) {
-    if (allOf(parentNode(anyOf(AbstractReturnValueIgnored::isVoidReturningLambdaExpression,
-        Matchers.kindIs(Kind.EXPRESSION_STATEMENT))),
+  @Override
+  public Description matchMethodInvocation(
+      MethodInvocationTree methodInvocationTree, VisitorState state) {
+    if (allOf(
+        parentNode(
+            anyOf(
+                AbstractReturnValueIgnored::isVoidReturningLambdaExpression,
+                Matchers.kindIs(Kind.EXPRESSION_STATEMENT))),
         not(methodSelect(toType(IdentifierTree.class, identifierHasName("super")))),
         not((t, s) -> ASTHelpers.isVoidType(ASTHelpers.getType(t), s)),
         specializedMatcher(),
-        not(AbstractReturnValueIgnored::expectedExceptionTest)).matches(methodInvocationTree,
-        state)) {
+        not(AbstractReturnValueIgnored::expectedExceptionTest))
+        .matches(methodInvocationTree, state)) {
       return describe(methodInvocationTree, state);
     }
     return Description.NO_MATCH;
   }
 
-  @Override public Description matchMemberReference(MemberReferenceTree tree, VisitorState state) {
-    if (allOf((t, s) -> t.getMode() == ReferenceMode.INVOKE,
+  @Override
+  public Description matchMemberReference(MemberReferenceTree tree, VisitorState state) {
+    if (allOf(
+        (t, s) -> t.getMode() == ReferenceMode.INVOKE,
         AbstractReturnValueIgnored::isVoidReturningMethodReferenceExpression,
         // Skip cases where the method we're referencing really does return void. We're only
         // looking for cases where the referenced method does not return void, but it's being
         // used on a void-returning functional interface.
-        not((t, s) -> ASTHelpers.isVoidType(ASTHelpers.getSymbol(tree)
-            .getReturnType(), s)),
+        not((t, s) -> ASTHelpers.isVoidType(ASTHelpers.getSymbol(tree).getReturnType(), s)),
         not((t, s) -> isThrowingFunctionalInterface(s, ((JCMemberReference) t).type)),
-        specializedMatcher()).matches(tree, state)) {
+        specializedMatcher())
+        .matches(tree, state)) {
       return describeMatch(tree);
     }
 
     return Description.NO_MATCH;
   }
 
-  private static boolean isVoidReturningMethodReferenceExpression(MemberReferenceTree tree,
-      VisitorState state) {
+  private static boolean isVoidReturningMethodReferenceExpression(
+      MemberReferenceTree tree, VisitorState state) {
     return functionalInterfaceReturnsExactlyVoid(((JCMemberReference) tree).type, state);
   }
 
@@ -119,12 +126,10 @@ public abstract class AbstractReturnValueIgnored extends BugChecker
    * ASTHelpers.isVoidType here, return values of Void are actually type-checked. Only
    * void-returning functions silently ignore return values of any type.
    */
-  private static boolean functionalInterfaceReturnsExactlyVoid(Type interfaceType,
-      VisitorState state) {
-    return state.getTypes()
-        .findDescriptorType(interfaceType)
-        .getReturnType()
-        .getKind() == TypeKind.VOID;
+  private static boolean functionalInterfaceReturnsExactlyVoid(
+      Type interfaceType, VisitorState state) {
+    return state.getTypes().findDescriptorType(interfaceType).getReturnType().getKind()
+        == TypeKind.VOID;
   }
 
   private static boolean methodCallInDeclarationOfThrowingRunnable(VisitorState state) {
@@ -163,24 +168,24 @@ public abstract class AbstractReturnValueIgnored extends BugChecker
    *
    * <p>// TODO(glorioso): Consider a meta-annotation like @LikelyToThrow instead/in addition?
    */
-  private static final ImmutableSet<String> CLASSES_CONSIDERED_THROWING = ImmutableSet.of(
-      "org.junit.function.ThrowingRunnable",
-      "org.junit.jupiter.api.function.Executable",
-      "org.assertj.core.api.ThrowableAssert$ThrowingCallable",
-      "com.google.truth.ExpectFailure.AssertionCallback",
-      "com.google.truth.ExpectFailure.DelegatedAssertionCallback",
-      "com.google.truth.ExpectFailure.StandardSubjectBuilderCallback",
-      "com.google.truth.ExpectFailure.SimpleSubjectBuilderCallback");
+  private static final ImmutableSet<String> CLASSES_CONSIDERED_THROWING =
+      ImmutableSet.of(
+          "org.junit.function.ThrowingRunnable",
+          "org.junit.jupiter.api.function.Executable",
+          "org.assertj.core.api.ThrowableAssert$ThrowingCallable",
+          "com.google.truth.ExpectFailure.AssertionCallback",
+          "com.google.truth.ExpectFailure.DelegatedAssertionCallback",
+          "com.google.truth.ExpectFailure.StandardSubjectBuilderCallback",
+          "com.google.truth.ExpectFailure.SimpleSubjectBuilderCallback");
 
   /**
    * Match whatever additional conditions concrete subclasses want to match (a list of known
-   * side-effect-free methods, has a @OptionalCheckReturnValue annotation, etc.).
+   * side-effect-free methods, has a @CheckReturnValue annotation, etc.).
    */
   public abstract Matcher<? super ExpressionTree> specializedMatcher();
 
   private static Matcher<IdentifierTree> identifierHasName(final String name) {
-    return (item, state) -> item.getName()
-        .contentEquals(name);
+    return (item, state) -> item.getName().contentEquals(name);
   }
 
   /**
@@ -190,10 +195,8 @@ public abstract class AbstractReturnValueIgnored extends BugChecker
   public Description describe(MethodInvocationTree methodInvocationTree, VisitorState state) {
     // Find the root of the field access chain, i.e. a.intern().trim() ==> a.
     ExpressionTree identifierExpr = ASTHelpers.getRootAssignable(methodInvocationTree);
-    String identifierStr = null;
     Type identifierType = null;
     if (identifierExpr != null) {
-      identifierStr = identifierExpr.toString();
       if (identifierExpr instanceof JCIdent) {
         identifierType = ((JCIdent) identifierExpr).sym.type;
       } else if (identifierExpr instanceof JCFieldAccess) {
@@ -207,18 +210,19 @@ public abstract class AbstractReturnValueIgnored extends BugChecker
         ASTHelpers.getReturnType(((JCMethodInvocation) methodInvocationTree).getMethodSelect());
 
     Fix fix;
-    if (identifierStr != null
-        && !"this".equals(identifierStr)
+    Symbol symbol = ASTHelpers.getSymbol(identifierExpr);
+    if (identifierExpr != null
+        && symbol != null
+        && !symbol.name.contentEquals("this")
         && returnType != null
-        && state.getTypes()
-        .isAssignable(returnType, identifierType)) {
+        && state.getTypes().isAssignable(returnType, identifierType)) {
       // Fix by assigning the assigning the result of the call to the root receiver reference.
-      fix = SuggestedFix.prefixWith(methodInvocationTree, identifierStr + " = ");
+      fix =
+          SuggestedFix.prefixWith(
+              methodInvocationTree, state.getSourceForNode(identifierExpr) + " = ");
     } else {
       // Unclear what the programmer intended.  Delete since we don't know what else to do.
-      Tree parent = state.getPath()
-          .getParentPath()
-          .getLeaf();
+      Tree parent = state.getPath().getParentPath().getLeaf();
       fix = SuggestedFix.delete(parent);
     }
     return describeMatch(methodInvocationTree, fix);
@@ -246,36 +250,38 @@ public abstract class AbstractReturnValueIgnored extends BugChecker
   }
 
   private static final Matcher<ExpressionTree> FAIL_METHOD =
-      anyOf(instanceMethod().onDescendantOf("com.google.common.truth.AbstractVerb")
+      anyOf(
+          instanceMethod().onDescendantOf("com.google.common.truth.AbstractVerb").named("fail"),
+          instanceMethod()
+              .onDescendantOf("com.google.common.truth.StandardSubjectBuilder")
               .named("fail"),
-          instanceMethod().onDescendantOf("com.google.common.truth.StandardSubjectBuilder")
-              .named("fail"),
-          staticMethod().onClass("org.junit.Assert")
-              .named("fail"),
-          staticMethod().onClass("junit.framework.Assert")
-              .named("fail"),
-          staticMethod().onClass("junit.framework.TestCase")
-              .named("fail"));
+          staticMethod().onClass("org.junit.Assert").named("fail"),
+          staticMethod().onClass("junit.framework.Assert").named("fail"),
+          staticMethod().onClass("junit.framework.TestCase").named("fail"));
 
-  private static final Matcher<StatementTree> EXPECTED_EXCEPTION_MATCHER = anyOf(
-      // expectedException.expect(Foo.class); me();
-      allOf(isLastStatementInBlock(),
-          previousStatement(expressionStatement(anyOf(instanceMethod().onExactClass(
-              "org.junit.rules.ExpectedException"))))),
-      // try { me(); fail(); } catch (Throwable t) {}
-      allOf(enclosingNode(kindIs(Kind.TRY)), nextStatement(expressionStatement(FAIL_METHOD))),
-      // assertThrows(Throwable.class, () => { me(); })
-      allOf(anyOf(isLastStatementInBlock(), parentNode(kindIs(Kind.LAMBDA_EXPRESSION))),
-          // Within the context of a ThrowingRunnable/Executable:
-          (t, s) -> methodCallInDeclarationOfThrowingRunnable(s)));
+  private static final Matcher<StatementTree> EXPECTED_EXCEPTION_MATCHER =
+      anyOf(
+          // expectedException.expect(Foo.class); me();
+          allOf(
+              isLastStatementInBlock(),
+              previousStatement(
+                  expressionStatement(
+                      anyOf(
+                          instanceMethod().onExactClass("org.junit.rules.ExpectedException")
+                      )))),
+          // try { me(); fail(); } catch (Throwable t) {}
+          allOf(enclosingNode(kindIs(Kind.TRY)), nextStatement(expressionStatement(FAIL_METHOD))),
+          // assertThrows(Throwable.class, () => { me(); })
+          allOf(
+              anyOf(isLastStatementInBlock(), parentNode(kindIs(Kind.LAMBDA_EXPRESSION))),
+              // Within the context of a ThrowingRunnable/Executable:
+              (t, s) -> methodCallInDeclarationOfThrowingRunnable(s)));
 
   private static final Matcher<ExpressionTree> MOCKITO_MATCHER =
-      anyOf(staticMethod().onClass("org.mockito.Mockito")
-              .named("verify"),
-          instanceMethod().onDescendantOf("org.mockito.stubbing.Stubber")
-              .named("when"),
-          instanceMethod().onDescendantOf("org.mockito.InOrder")
-              .named("verify"));
+      anyOf(
+          staticMethod().onClass("org.mockito.Mockito").named("verify"),
+          instanceMethod().onDescendantOf("org.mockito.stubbing.Stubber").named("when"),
+          instanceMethod().onDescendantOf("org.mockito.InOrder").named("verify"));
 
   /**
    * Don't match the method that is invoked through {@code Mockito.verify(t)} or {@code

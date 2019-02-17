@@ -16,18 +16,19 @@
 
 package io.sweers.configurablecheckreturnvalue.errorprone;
 
-import io.reactivex.annotations.OptionalCheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import org.junit.rules.ExpectedException;
 
 /**
  * Adapted from https://github.com/google/error-prone/blob/976ab7c627/core/src/test/java/com/google/errorprone/bugpatterns/testdata/CheckReturnValuePositiveCases.java
  * @author eaftan@google.com (Eddie Aftandilian)
  */
-public class OptionalCheckReturnValuePositiveCases {
+public class ConfigurableCheckReturnValuePositiveCases {
 
   IntValue intValue = new IntValue(0);
 
-  @OptionalCheckReturnValue private int increment(int bar) {
+  @CheckReturnValue
+  private int increment(int bar) {
     return bar + 1;
   }
 
@@ -64,17 +65,17 @@ public class OptionalCheckReturnValuePositiveCases {
   }
 
   public void testRegularLambda() {
-    callRunnable(() -> {
-      // BUG: Diagnostic contains: Ignored return value
-      this.intValue.increment();
-    });
+    callRunnable(
+        () -> {
+          // BUG: Diagnostic contains: Ignored return value
+          this.intValue.increment();
+        });
   }
 
   public void testBeforeAndAfterRule() {
     // BUG: Diagnostic contains: remove this line
     new IntValue(1).increment();
-    ExpectedException.none()
-        .expect(IllegalStateException.class);
+    ExpectedException.none().expect(IllegalStateException.class);
     new IntValue(1).increment(); // No error here, last statement in block
   }
 
@@ -88,7 +89,7 @@ public class OptionalCheckReturnValuePositiveCases {
      * scenario may be a class like IteratorTester, which requires (a) that the
      * user subclass it to implement a method and (b) that the user call test()
      * on the constructed object. There, it would be nice if IteratorTester
-     * could be annotated with @OptionalCheckReturnValue to mean "anyone who creates an
+     * could be annotated with @CheckReturnValue to mean "anyone who creates an
      * anonymous subclasses of this should still do something with that
      * subclass." But perhaps that's an abuse of @CheckForNull.
      *
@@ -120,7 +121,8 @@ public class OptionalCheckReturnValuePositiveCases {
       this.i = i;
     }
 
-    @OptionalCheckReturnValue public IntValue increment() {
+    @javax.annotation.CheckReturnValue
+    public IntValue increment() {
       return new IntValue(i + 1);
     }
 
@@ -136,14 +138,16 @@ public class OptionalCheckReturnValuePositiveCases {
   }
 
   private static class MyObject {
-    @OptionalCheckReturnValue MyObject() {}
+    @CheckReturnValue
+    MyObject() {}
   }
 
   private abstract static class LB1<A> {}
 
   private static class LB2<A> extends LB1<A> {
 
-    @OptionalCheckReturnValue public static <T> LB2<T> lb1() {
+    @CheckReturnValue
+    public static <T> LB2<T> lb1() {
       return new LB2<T>();
     }
 
@@ -151,6 +155,18 @@ public class OptionalCheckReturnValuePositiveCases {
       // BUG: Diagnostic contains: remove this line
       lb1();
       return lb1();
+    }
+  }
+
+  private static class JavaxAnnotation {
+    @javax.annotation.CheckReturnValue
+    public static int check() {
+      return 1;
+    }
+
+    public static void ignoresCheck() {
+      // BUG: Diagnostic contains: remove this line
+      check();
     }
   }
 }

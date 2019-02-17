@@ -17,8 +17,8 @@
 def versions = [
   dokka: '0.9.17',
   errorProne: '2.3.2',
-  errorPronePlugin: '0.0.13',
-  kotlin: '1.3.10',
+  errorPronePlugin: '0.6',
+  kotlin: '1.3.21',
   lint: '26.3.0-beta04'
 ]
 
@@ -36,6 +36,7 @@ def build = [
 ]
 
 def errorProne = [
+  core: "com.google.errorprone:error_prone_core:${versions.errorProne}",
   checkApi: "com.google.errorprone:error_prone_check_api:${versions.errorProne}",
   testHelpers: "com.google.errorprone:error_prone_test_helpers:${versions.errorProne}",
 ]
@@ -51,8 +52,9 @@ def lint = [
 ]
 
 def test = [
+  assertJ: 'org.assertj:assertj-core:3.11.1',
   guava: 'com.google.guava:guava:27.0.1-jre',
-  junit: 'junit:junit:4.12',
+  junit: 'junit:junit:4.13-beta-2',
   mockito: 'org.mockito:mockito-core:1.9.5',
   truth: 'com.google.truth:truth:0.42'
 ]
