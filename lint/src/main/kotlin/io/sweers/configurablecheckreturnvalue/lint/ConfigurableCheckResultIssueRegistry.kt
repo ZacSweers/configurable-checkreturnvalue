@@ -1,4 +1,4 @@
-package io.sweers.rxjava2optionalcheckreturnvaluechecker.lint
+package io.sweers.configurablecheckreturnvalue.lint
 
 import com.android.tools.lint.client.api.IssueRegistry
 import com.android.tools.lint.detector.api.CURRENT_API
@@ -11,5 +11,5 @@ class CheckOptionalReturnValueIssueRegistry : IssueRegistry() {
   override val api = CURRENT_API
   override val minApi = 2
   override val issues
-    get() = listOf(OptionalCheckReturnValueDetector.OPTIONAL_CHECK_RETURN_VALUE)
+    get() = listOf(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
 }

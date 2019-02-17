@@ -41,6 +41,6 @@
   }
 }
 
-rootProject.name = 'rxjava2-optionalcheckreturnvalue-checkers-root'
+rootProject.name = 'configurablecheckreturnvalue-root'
 include ':lint'
 include ':error-prone'

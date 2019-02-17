@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package io.sweers.rxjava2optionalcheckreturnvaluecheckers.errorprone;
+package io.sweers.configurablecheckreturnvalue.errorprone;
 
-import io.reactivex.annotations.OptionalCheckReturnValue;
+import com.google.errorprone.annotations.CheckReturnValue;
 import java.util.function.Supplier;
 
 /**
  * Adapted from https://github.com/google/error-prone/blob/976ab7c62771d54dfe11bde9b01dc301d364957b/core/src/test/java/com/google/errorprone/bugpatterns/testdata/CheckReturnValueNegativeCases.java
  * @author eaftan@google.com (Eddie Aftandilian)
  */
-public class OptionalCheckReturnValueNegativeCases {
+public class ConfigurableCheckReturnValueNegativeCases {
 
   public void test1() {
     test2();
@@ -31,10 +31,10 @@ public class OptionalCheckReturnValueNegativeCases {
     obj.toString();
   }
 
-  @SuppressWarnings("foo") // wrong annotations
+  @SuppressWarnings("foo") // wrong annotation
   public void test2() {}
 
-  @OptionalCheckReturnValue
+  @CheckReturnValue
   private int mustCheck() {
     return 5;
   }
