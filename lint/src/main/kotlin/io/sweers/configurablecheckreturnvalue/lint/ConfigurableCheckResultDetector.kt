@@ -37,7 +37,6 @@ import org.jetbrains.uast.ULambdaExpression
 import org.jetbrains.uast.UMethod
 import org.jetbrains.uast.UQualifiedReferenceExpression
 import org.jetbrains.uast.getParentOfType
-import java.io.StringReader
 import java.util.EnumSet
 import java.util.Properties
 
@@ -55,26 +54,25 @@ class ConfigurableCheckResultDetector : Detector(), SourceCodeScanner {
     val excludedAnnotations = mutableSetOf<String>()
 
     // Add the custom annotations defined in configuration.
-    val props = Properties()
-    context.project.propertyFiles.find { it.name == PROPERTY_FILE }?.apply {
-      val content = StringReader(context.client.readFile(this).toString())
-      props.load(content)
-      annotations += props.getProperty(CUSTOM_ANNOTATIONS_KEY)
-          ?.split(":")
-          ?.asSequence()
-          ?.map(String::trim)
-          ?.filter(String::isNotBlank)
-          ?.toList()
-          ?: DEFAULT_ANNOTATIONS
-
-      props.getProperty(EXCLUDE_ANNOTATIONS_KEY)
-          ?.split(":")
-          ?.asSequence()
-          ?.map(String::trim)
-          ?.filter(String::isNotBlank)
-          ?.toList()
-          ?.let { excludedAnnotations += it }
+    val props = Properties().apply {
+      context.project.propertyFiles.find { it.name == PROPERTY_FILE }?.let { file ->
+        load(context.client.readFile(file).reader())
+      }
     }
+    annotations += props.getProperty(CUSTOM_ANNOTATIONS_KEY)
+        ?.split(":")
+        ?.asSequence()
+        ?.map(String::trim)
+        ?.filter(String::isNotBlank)
+        ?.toList()
+        ?: DEFAULT_ANNOTATIONS
+    props.getProperty(EXCLUDE_ANNOTATIONS_KEY)
+        ?.split(":")
+        ?.asSequence()
+        ?.map(String::trim)
+        ?.filter(String::isNotBlank)
+        ?.toList()
+        ?.let { excludedAnnotations += it }
     appliedAnnotations = annotations.filterNot { it in excludedAnnotations }.toList()
   }
 

@@ -7,10 +7,10 @@ import org.junit.Test
 
 class ConfigurableCheckResultDetectorTest {
 
-  private val annotation = java("test/io/reactivex/annotations/OptionalCheckReturnValue.java", """
-    package io.reactivex.annotations;
+  private val annotation = java("test/com/google/errorprone/annotations/CheckReturnValue.java", """
+    package com.google.errorprone.annotations;
 
-    public @interface OptionalCheckReturnValue {
+    public @interface CheckReturnValue {
     }
   """).indented()
 
@@ -26,9 +26,9 @@ class ConfigurableCheckResultDetectorTest {
     lint()
         .files(annotation, java("test/test/foo/Example.java", """
           package test.foo;
-          import io.reactivex.annotations.OptionalCheckReturnValue;
+          import com.google.errorprone.annotations.CheckReturnValue;
           class Example {
-            @OptionalCheckReturnValue
+            @CheckReturnValue
             public int foo() {
                 return 2;
             }
@@ -39,7 +39,7 @@ class ConfigurableCheckResultDetectorTest {
         .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
         .run()
         .expect("""
-          |test/test/foo/Example.java:9: Error: The result of foo is not used [OptionalCheckReturnValue]
+          |test/test/foo/Example.java:9: Error: The result of foo is not used [ConfigurableCheckReturnValue]
           |    foo();
           |    ~~~~~
           |1 errors, 0 warnings""".trimMargin()
@@ -53,10 +53,10 @@ class ConfigurableCheckResultDetectorTest {
         .files(annotation, canIgnoreReturnValue, java("test/test/foo/Example.java", """
           package test.foo;
           import com.google.errorprone.annotations.CanIgnoreReturnValue;
-          import io.reactivex.annotations.OptionalCheckReturnValue;
+          import com.google.errorprone.annotations.CheckReturnValue;
           @CanIgnoreReturnValue
           class Example {
-            @OptionalCheckReturnValue
+            @CheckReturnValue
             public int foo() {
                 return 2;
             }
@@ -77,9 +77,9 @@ class ConfigurableCheckResultDetectorTest {
         .files(annotation, canIgnoreReturnValue, java("test/test/foo/Example.java", """
           package test.foo;
           import com.google.errorprone.annotations.CanIgnoreReturnValue;
-          import io.reactivex.annotations.OptionalCheckReturnValue;
+          import com.google.errorprone.annotations.CheckReturnValue;
           class Example {
-            @OptionalCheckReturnValue
+            @CheckReturnValue
             public int foo() {
                 return 2;
             }
@@ -103,9 +103,9 @@ class ConfigurableCheckResultDetectorTest {
     lint()
         .files(annotation, canIgnoreReturnValue, packageInfo, java("test/test/foo/Example.java", """
           package test.lib;
-          import io.reactivex.annotations.OptionalCheckReturnValue;
+          import com.google.errorprone.annotations.CheckReturnValue;
           class Example {
-            @OptionalCheckReturnValue
+            @CheckReturnValue
             public int foo() {
                 return 2;
             }
