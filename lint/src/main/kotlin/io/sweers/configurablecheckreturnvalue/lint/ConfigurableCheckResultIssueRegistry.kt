@@ -9,7 +9,6 @@ internal const val PRIORITY = 10 // Does not matter anyways within Lint.
 @AutoService(IssueRegistry::class)
 class CheckOptionalReturnValueIssueRegistry : IssueRegistry() {
   override val api = CURRENT_API
-  override val minApi = 2
   override val issues
     get() = listOf(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
 }
