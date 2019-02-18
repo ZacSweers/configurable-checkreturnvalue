@@ -51,8 +51,12 @@ import static com.google.errorprone.util.ASTHelpers.hasDirectAnnotationWithSimpl
  *
  * @author eaftan@google.com (Eddie Aftandilian)
  */
-@BugPattern(name = "ConfigurableCheckReturnValue", summary = "Ignored return value of method that"
-    + " is annotated with @CheckReturnValue or specified alternatives", severity = ERROR)
+@BugPattern(
+    name = "ConfigurableCheckReturnValue",
+    altNames = {"CheckReturnValue", "ResultOfMethodCallIgnored", "ReturnValueIgnored"},
+    summary = "Ignored return value of method that is annotated with @CheckReturnValue or specified alternatives",
+    severity = ERROR
+)
 public class ConfigurableCheckReturnValue extends AbstractReturnValueIgnored
     implements MethodTreeMatcher, ClassTreeMatcher {
 
