@@ -27,7 +27,7 @@ class ConfigurableCheckResultDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
         .run()
         .expect("""
           |test/test/foo/Example.java:9: Error: The result of foo is not used [ConfigurableCheckReturnValue]
@@ -56,7 +56,7 @@ class ConfigurableCheckResultDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }
@@ -80,7 +80,7 @@ class ConfigurableCheckResultDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
         .run()
         .expect("""
           |test/test/foo/Example.java:9: Error: The result of foo is not used [ConfigurableCheckReturnValue]
@@ -109,7 +109,7 @@ class ConfigurableCheckResultDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }
@@ -133,7 +133,7 @@ class ConfigurableCheckResultDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }
@@ -158,7 +158,7 @@ class ConfigurableCheckResultDetectorTest {
               foo();
             }
           }""").indented())
-        .issues(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+        .issues(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
         .run()
         .expectClean()
   }

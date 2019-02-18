@@ -11,5 +11,5 @@ class CheckOptionalReturnValueIssueRegistry : IssueRegistry() {
   override val api = CURRENT_API
   override val minApi = 2
   override val issues
-    get() = listOf(ConfigurableCheckResultDetector.OPTIONAL_CHECK_RETURN_VALUE)
+    get() = listOf(ConfigurableCheckResultDetector.CONFIGURABLE_CHECK_RETURN_VALUE)
 }

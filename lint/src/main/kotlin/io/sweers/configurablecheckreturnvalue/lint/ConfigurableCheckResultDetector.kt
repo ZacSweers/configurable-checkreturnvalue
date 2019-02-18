@@ -41,7 +41,7 @@ import java.util.EnumSet
 import java.util.Properties
 
 /**
- * Adapted from https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint/libs/lint-checks/src/main/java/com/android/tools/lint/checks/CheckResultDetector.kt
+ * Adapted from [AOSP](https://android.googlesource.com/platform/tools/base/+/studio-master-dev/lint/libs/lint-checks/src/main/java/com/android/tools/lint/checks/CheckResultDetector.kt)
  *
  * Modified to only check `OptionalCheckReturnValue`.
  */
@@ -160,7 +160,7 @@ class ConfigurableCheckResultDetector : Detector(), SourceCodeScanner {
         null
       }
       val location = context.getLocation(element)
-      context.report(OPTIONAL_CHECK_RETURN_VALUE, element, location, message, fix)
+      context.report(CONFIGURABLE_CHECK_RETURN_VALUE, element, location, message, fix)
     }
   }
 
@@ -249,15 +249,15 @@ class ConfigurableCheckResultDetector : Detector(), SourceCodeScanner {
     )
     /** Method result should be used  */
     @JvmField
-    val OPTIONAL_CHECK_RETURN_VALUE = Issue.create(
-        id = "ConfigurableCheckReturnValue",
+    val CONFIGURABLE_CHECK_RETURN_VALUE = Issue.create(
+        id = "ConfigurableCheckReturn",
         briefDescription = "Ignoring results",
         explanation = """
                 Some methods have no side effects, and calling them without doing something \
                 without the result is suspicious.""",
         category = Category.CORRECTNESS,
         priority = 6,
-        severity = Severity.ERROR,
+        severity = Severity.WARNING,
         implementation = IMPLEMENTATION
     )
   }
